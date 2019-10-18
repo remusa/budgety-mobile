@@ -3,10 +3,10 @@ import { BottomNavigation, BottomNavigationTab } from 'react-native-ui-kitten'
 
 interface Props {}
 
-const BottomNavigationShowcase: React.FC<Props> = props => {
-    console.log('props', props)
+const BottomNavigationContent: React.FC<Props> = props => {
     const onTabSelect = selectedIndex => {
-        const { [index]: selectedRoute } = props.navigation.state.routes
+        const { index: currentIndex, routes } = props.navigation.state
+        const selectedRoute = routes[selectedIndex]
         props.navigation.navigate(selectedRoute.routeName)
     }
 
@@ -19,4 +19,4 @@ const BottomNavigationShowcase: React.FC<Props> = props => {
     )
 }
 
-export default BottomNavigationShowcase
+export default BottomNavigationContent

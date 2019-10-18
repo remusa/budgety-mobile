@@ -8,6 +8,7 @@ import PastMonthsScreen from '../screens/PastMonths/PastMonthsScreen'
 import SettingsScreen from '../screens/Settings/SettingsScreen'
 import TransactionScreen from '../screens/Transaction/TransactionScreen'
 import FutureScreen from './../screens/Future/FutureScreen'
+import BottomNavigationContent from './BottomNavigation'
 
 const defaultNavOptions = {
     // headerStyle: {
@@ -75,7 +76,7 @@ const FutureStack = createStackNavigator({
     },
 })
 
-export const MainTabs = createBottomTabNavigator(
+const MainTabs = createBottomTabNavigator(
     {
         Past: {
             screen: PastMonthStack,
@@ -98,7 +99,7 @@ export const MainTabs = createBottomTabNavigator(
     },
     {
         initialRouteName: 'Current',
-        // tabBarComponent: BottomNavigationShowcase,
+        tabBarComponent: BottomNavigationContent,
         // defaultNavigationOptions: defaultNavOptions,
         // tabBarOptions: {
         // activeTintColor: '#e91e63',
