@@ -28,7 +28,6 @@ export default function App() {
 
     return (
         <ThemeProvider>
-            {/* <ApplicationContent currentTheme={theme} toggleTheme={toggleTheme} /> */}
             <Navigator />
         </ThemeProvider>
     )

@@ -12,7 +12,7 @@ interface IThemeContext {
 const ThemeContext = createContext({} as IThemeContext)
 
 interface Props {
-    // children: HTMLElement | React.ReactNode
+    children: HTMLElement | React.ReactNode
 }
 
 const ThemeProvider: React.FC<Props> = ({ children }) => {
@@ -32,11 +32,11 @@ const ThemeProvider: React.FC<Props> = ({ children }) => {
     return (
         <>
             <IconRegistry icons={EvaIconsPack} />
-            <ApplicationProvider mapping={mapping} theme={currentTheme}>
-                <ThemeContext.Provider value={{ theme: stringTheme, toggleTheme }}>
+            <ThemeContext.Provider value={{ theme: stringTheme, toggleTheme }}>
+                <ApplicationProvider mapping={mapping} theme={currentTheme}>
                     {children}
-                </ThemeContext.Provider>
-            </ApplicationProvider>
+                </ApplicationProvider>
+            </ThemeContext.Provider>
         </>
     )
 }

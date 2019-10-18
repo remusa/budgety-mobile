@@ -4,12 +4,8 @@ import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native'
 import { Button, Datepicker, Icon, Input, Layout, Modal, Spinner, Text, TopNavigation } from 'react-native-ui-kitten'
 import { NavigationStackScreenProps } from 'react-navigation-stack'
 import * as yup from 'yup'
-import { FIREBASE_SIGNOUT } from './../../utils/auth'
 import { amountValidation } from './../../utils/validationSchemas'
 
-const ArrowLeftIcon = style => <Icon {...style} name="arrow-left" />
-const ArrowRightIcon = style => <Icon {...style} name="arrow-right" />
-const DashboardIcon = style => <Icon {...style} name="layout" />
 const PlusIcon = style => <Icon {...style} name="plus-circle" />
 const CheckmarkIcon = style => <Icon {...style} name="checkmark-circle-2" />
 const CalendarIcon = style => <Icon {...style} name="calendar" />
@@ -27,8 +23,7 @@ interface ITransaction {
     date: Date
 }
 
-const HomeScreen: React.FC<Props> = props => {
-    // const [selectedIndex, setSelectedIndex] = useState(1)
+const TransactionScreen: React.FC<Props> = props => {
     const [modalVisible, setModalVisible] = useState(false)
     const [transaction, setTransaction] = useState<ITransaction>({
         amount: '',
@@ -52,7 +47,10 @@ const HomeScreen: React.FC<Props> = props => {
         amount: amountValidation,
     })
 
-    const handleSave = async ({ amount, category, date }: ITransaction, actions) => {
+    const handleSave = async (
+        { amount, category, note, date }: ITransaction,
+        actions: FormikActions<ITransaction>
+    ) => {
         setTransaction({ amount, category, note, date })
         actions.setSubmitting(true)
 
@@ -175,39 +173,9 @@ const HomeScreen: React.FC<Props> = props => {
         )
     }
 
-    // const onSelect = (index: number) => {
-    //     setSelectedIndex(index)
-    // }
-
-    // const shouldLoadTabContent = (index: number) => {
-    //     return index === selectedIndex
-    // }
-
-    const handleLogout = () => {
-        FIREBASE_SIGNOUT().then(() => {
-            props.navigation.navigate('Auth')
-        })
-    }
-
-    const navigate = () => {
-        props.navigation.navigate('Settings')
-    }
-
     return (
-        // <TabView
-        //     selectedIndex={selectedIndex}
-        //     shouldLoadComponent={shouldLoadTabContent}
-        //     onSelect={onSelect}
-        // >
-        //     <Tab style={styles.tab} icon={ArrowLeftIcon} title="Past month">
-        //         <Layout style={styles.tabContent}>
-        //             <Text category={'h1'}>Past month</Text>
-        //         </Layout>
-        //     </Tab>
-
-        // <Tab style={styles.tab} icon={DashboardIcon} title="Current month">
         <Layout style={styles.tabContent}>
-            <Text category={'h1'}>Current month</Text>
+            <Text category={'h1'}>Add transaction</Text>
 
             <Button icon={PlusIcon} onPress={toggleModal} status="success" size="large">
                 Add transaction
@@ -221,26 +189,9 @@ const HomeScreen: React.FC<Props> = props => {
             >
                 {renderModalElement()}
             </Modal>
-
-            <Button onPress={navigate}>Settings</Button>
-
-            <Button onPress={handleLogout}>Logout</Button>
         </Layout>
-        // </Tab>
-
-        /* <Tab style={styles.tab} icon={ArrowRightIcon} title="Future">
-                <Layout style={styles.tabContent}>
-                    <Text category={'h1'}>Future</Text>
-                </Layout>
-            </Tab>
-        </TabView> */
     )
 }
-
-// HomeScreen.navigationOptions = {
-//     headerTitle: 'Home',
-// }
-
 export const TopNavigationSimpleUsageShowcase = () => <TopNavigation title="Home" />
 
 const styles = StyleSheet.create({
@@ -279,4 +230,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HomeScreen
+export default TransactionScreen

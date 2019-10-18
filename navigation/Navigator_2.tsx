@@ -75,7 +75,7 @@ const FutureStack = createStackNavigator({
     },
 })
 
-export const MainTabs = createBottomTabNavigator(
+const MainTabs = createBottomTabNavigator(
     {
         Past: {
             screen: PastMonthStack,
@@ -98,7 +98,6 @@ export const MainTabs = createBottomTabNavigator(
     },
     {
         initialRouteName: 'Current',
-        // tabBarComponent: BottomNavigationShowcase,
         // defaultNavigationOptions: defaultNavOptions,
         // tabBarOptions: {
         // activeTintColor: '#e91e63',

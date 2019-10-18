@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Drawer, DrawerHeaderFooter, Icon, Layout } from 'react-native-ui-kitten'
 import { SafeAreaView } from 'react-navigation'
 import { NavigationStackScreenProps } from 'react-navigation-stack'
+import { MainTabs } from './Navigator'
 
 const PersonIcon = style => <Icon {...style} name="person" />
 
@@ -13,18 +14,11 @@ interface Props {
 }
 
 const DrawerNavigation: React.FC<Props> = props => {
-    const drawerData = [
-        { title: 'Home' },
-        { title: 'Settings' },
-        // { title: 'Articles' },
-        // { title: 'Ecommerce' },
-        // { title: 'Chat' },
-    ]
+    const drawerData = [{ screen: MainTabs }, { screen: 'Settings' }]
 
     const onRouteSelect = index => {
         const { [index]: route } = drawerData
-        // navigate with React Navigation
-        props.navigation.navigate(route.title)
+        props.navigation.navigate(route.screen)
     }
 
     const renderProfileHeader = () => (

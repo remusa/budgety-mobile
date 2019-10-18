@@ -8,7 +8,10 @@ import { FIREBASE_SIGNIN, FIREBASE_SIGNUP, getUser } from '../../utils/auth'
 import Firebase from '../../utils/Firebase'
 import { emailValidation, passwordValidation } from '../../utils/validationSchemas'
 
-const StarIcon = style => <Icon {...style} name="star" />
+const PeopleIcon = style => <Icon {...style} name="people" />
+const LoginIcon = style => <Icon {...style} name="log-in" />
+
+const MAIN_SCREEN = 'Current'
 
 const validationSchema = yup.object().shape({
     email: emailValidation,
@@ -37,11 +40,13 @@ const AuthScreen: React.FC<Props> = props => {
         Firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 const userData = getUser(user.uid)
+                console.log('userData FOUND', userData)
 
                 if (userData !== null) {
-                    console.log('userData', userData)
                     props.navigation.navigate('Home')
                 }
+            } else {
+                console.log('userData NOT FOUND')
             }
         })
     }, [])
@@ -67,7 +72,7 @@ const AuthScreen: React.FC<Props> = props => {
                 // res = await SIGN_IN(email, password)
                 await FIREBASE_SIGNIN(email, password)
             }
-            props.navigation.navigate('Home')
+            props.navigation.navigate(MAIN_SCREEN)
         } catch (e) {
             setError(e.message)
             setIsLoading(false)
@@ -108,6 +113,7 @@ const AuthScreen: React.FC<Props> = props => {
                                 <Text category={'h3'}>{isSignup ? 'Sign Up' : 'Login'}</Text>
 
                                 <Input
+                                    icon={PeopleIcon}
                                     style={styles.input}
                                     label="Email"
                                     disabled={false}
@@ -153,7 +159,7 @@ const AuthScreen: React.FC<Props> = props => {
                                             <Spinner status="primary" size="medium" />
                                         ) : (
                                             <Button
-                                                icon={StarIcon}
+                                                icon={LoginIcon}
                                                 style={styles.button}
                                                 status="primary"
                                                 onPress={handleSubmit}
@@ -191,9 +197,9 @@ const AuthScreen: React.FC<Props> = props => {
     )
 }
 
-AuthScreen.navigationOptions = {
-    headerTitle: 'Authenticate',
-}
+// AuthScreen.navigationOptions = {
+//     headerTitle: 'Authenticate',
+// }
 
 const styles = StyleSheet.create({
     screen: {
