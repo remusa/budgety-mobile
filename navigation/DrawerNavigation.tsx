@@ -20,7 +20,6 @@ const DrawerNavigation: React.FC<Props> = props => {
         title: routeName,
     })
 
-    console.log('props.items', props.items)
     // const drawerData = props.items.map(createDrawerItem)
     const drawerData = [
         { title: 'Home', icon: HomeIcon },
