@@ -9,6 +9,7 @@ import SettingsScreen from '../screens/Settings/SettingsScreen'
 import TransactionScreen from '../screens/Transaction/TransactionScreen'
 import FutureScreen from './../screens/Future/FutureScreen'
 import BottomNavigationContent from './BottomNavigation'
+import DrawerNavigation from './DrawerNavigation'
 
 const defaultNavOptions = {
     // headerStyle: {
@@ -113,14 +114,19 @@ const MainTabs = createBottomTabNavigator(
     }
 )
 
-const MainDrawer = createDrawerNavigator({
-    Home: {
-        screen: MainTabs,
+const MainDrawer = createDrawerNavigator(
+    {
+        Home: {
+            screen: MainTabs,
+        },
+        Settings: {
+            screen: SettingsScreen,
+        },
     },
-    Settings: {
-        screen: SettingsScreen,
-    },
-})
+    {
+        contentComponent: DrawerNavigation,
+    }
+)
 
 // const AppModalStack = createStackNavigator(
 //     {
