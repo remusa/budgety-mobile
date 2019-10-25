@@ -6,7 +6,8 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "cache": "expo r -c"
+        "cache": "expo r -c",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@eva-design/eva": "^1.2.0",
