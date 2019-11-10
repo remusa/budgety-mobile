@@ -28,7 +28,6 @@ interface ITransaction {
 }
 
 const HomeScreen: React.FC<Props> = props => {
-    // const [selectedIndex, setSelectedIndex] = useState(1)
     const [modalVisible, setModalVisible] = useState(false)
     const [transaction, setTransaction] = useState<ITransaction>({
         amount: '',
@@ -175,14 +174,6 @@ const HomeScreen: React.FC<Props> = props => {
         )
     }
 
-    // const onSelect = (index: number) => {
-    //     setSelectedIndex(index)
-    // }
-
-    // const shouldLoadTabContent = (index: number) => {
-    //     return index === selectedIndex
-    // }
-
     const handleLogout = () => {
         FIREBASE_SIGNOUT().then(() => {
             props.navigation.navigate('Auth')
@@ -194,18 +185,6 @@ const HomeScreen: React.FC<Props> = props => {
     }
 
     return (
-        // <TabView
-        //     selectedIndex={selectedIndex}
-        //     shouldLoadComponent={shouldLoadTabContent}
-        //     onSelect={onSelect}
-        // >
-        //     <Tab style={styles.tab} icon={ArrowLeftIcon} title="Past month">
-        //         <Layout style={styles.tabContent}>
-        //             <Text category={'h1'}>Past month</Text>
-        //         </Layout>
-        //     </Tab>
-
-        // <Tab style={styles.tab} icon={DashboardIcon} title="Current month">
         <Layout style={styles.tabContent}>
             <Text category={'h1'}>Current month</Text>
 
@@ -226,20 +205,8 @@ const HomeScreen: React.FC<Props> = props => {
 
             <Button onPress={handleLogout}>Logout</Button>
         </Layout>
-        // </Tab>
-
-        /* <Tab style={styles.tab} icon={ArrowRightIcon} title="Future">
-                <Layout style={styles.tabContent}>
-                    <Text category={'h1'}>Future</Text>
-                </Layout>
-            </Tab>
-        </TabView> */
     )
 }
-
-// HomeScreen.navigationOptions = {
-//     headerTitle: 'Home',
-// }
 
 export const TopNavigationSimpleUsageShowcase = () => <TopNavigation title="Home" />
 
@@ -248,8 +215,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // padding: 16,
         height: '100%',
+        // padding: 16,
         // paddingBottom: 32,
     },
     tab: {},

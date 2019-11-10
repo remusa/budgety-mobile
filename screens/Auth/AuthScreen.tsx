@@ -2,7 +2,8 @@ import { Formik, FormikActions } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native'
 import { Button, Icon, Input, Layout, Spinner, Text } from 'react-native-ui-kitten'
-import { NavigationStackScreenProps } from 'react-navigation-stack'
+import { NavigationParams, NavigationRoute } from 'react-navigation'
+import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 import * as yup from 'yup'
 import { FIREBASE_SIGNIN, FIREBASE_SIGNUP, getUser } from '../../utils/auth'
 import Firebase from '../../utils/Firebase'
@@ -25,7 +26,7 @@ interface IUser {
 
 interface Props {
     navigation: NavigationStackScreenProps<{
-        navigate: any
+        navigate: NavigationStackProp<NavigationRoute, NavigationParams>
     }>
 }
 

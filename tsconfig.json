@@ -1,7 +1,10 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
+        "target": "ES2018",
+        "module": "commonjs",
         "jsx": "react-native",
+        "strict": true,
+        "allowSyntheticDefaultImports": true,
         "lib": ["dom", "esnext"],
         "moduleResolution": "node",
         "noEmit": true,
