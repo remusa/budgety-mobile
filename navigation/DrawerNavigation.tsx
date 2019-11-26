@@ -4,10 +4,10 @@ import { Button, Drawer, DrawerHeaderFooter, Icon, Layout } from 'react-native-u
 import { SafeAreaView } from 'react-navigation'
 import { FIREBASE_SIGNOUT } from '../utils/auth'
 
-const PersonIcon = style => <Icon {...style} name="person" />
-const HomeIcon = style => <Icon {...style} name="layout" />
-const SettingsIcon = style => <Icon {...style} name="settings" />
-const LogoutIcon = style => <Icon {...style} name="log-out" />
+const PersonIcon = style => <Icon {...style} name='person' />
+const HomeIcon = style => <Icon {...style} name='layout' />
+const SettingsIcon = style => <Icon {...style} name='settings' />
+const LogoutIcon = style => <Icon {...style} name='log-out' />
 
 interface Props {
     // navigation: NavigationStackScreenProps<{
@@ -52,14 +52,14 @@ const DrawerNavigation: React.FC<Props> = props => {
 
     const renderProfileHeader = () => (
         <DrawerHeaderFooter
-            title="John Doe"
-            description="React Native Developer"
+            title='John Doe'
+            description='React Native Developer'
             icon={PersonIcon}
             accessory={LogoutButton}
         />
     )
 
-    const renderFooter = () => <DrawerHeaderFooter description="Budgety" />
+    const renderFooter = () => <DrawerHeaderFooter description='Budgety' />
 
     return (
         <Layout style={styles.container}>
@@ -78,6 +78,7 @@ const DrawerNavigation: React.FC<Props> = props => {
 const styles = StyleSheet.create({
     container: {
         padding: 16,
+        height: 100,
     },
 })
 

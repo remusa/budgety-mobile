@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@eva-design/eva": "^1.2.0",
+        "@react-native-community/async-storage": "^1.6.3",
         "@ui-kitten/eva-icons": "^4.2.0",
         "expo": "^35.0.0",
         "firebase": "^7.2.0",

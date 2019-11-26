@@ -4,11 +4,11 @@ import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native'
 import { Button, Datepicker, Icon, Input, Layout, Modal, Spinner, Text, TopNavigation } from 'react-native-ui-kitten'
 import { NavigationStackScreenProps } from 'react-navigation-stack'
 import * as yup from 'yup'
-import { amountValidation } from './../../utils/validationSchemas'
+import { amountValidation } from '../../utils/validationSchemas'
 
-const PlusIcon = style => <Icon {...style} name="plus-circle" />
-const CheckmarkIcon = style => <Icon {...style} name="checkmark-circle-2" />
-const CalendarIcon = style => <Icon {...style} name="calendar" />
+const PlusIcon = style => <Icon {...style} name='plus-circle' />
+const CheckmarkIcon = style => <Icon {...style} name='checkmark-circle-2' />
+const CalendarIcon = style => <Icon {...style} name='calendar' />
 
 interface Props {
     navigation: NavigationStackScreenProps<{
@@ -21,22 +21,24 @@ interface ITransaction {
     category: string
     note: string
     date: Date
+    type: string
 }
 
 const TransactionScreen: React.FC<Props> = props => {
     const [modalVisible, setModalVisible] = useState(false)
-    const [transaction, setTransaction] = useState<ITransaction>({
-        amount: '',
-        category: '',
-        note: '',
-        date: new Date(),
-    })
+    // const [transaction, setTransaction] = useState<ITransaction>({
+    //     amount: '123.00',
+    //     category: 'Health',
+    //     note: 'Test123',
+    //     date: new Date(),
+    //     type: 'expense',
+    // })
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
 
     const onSelectDate = date => {
         console.log('date', date)
-        setTransaction({ ...transaction, date })
+        // setTransaction({ ...transaction, date })
     }
 
     const toggleModal = () => {
@@ -51,29 +53,44 @@ const TransactionScreen: React.FC<Props> = props => {
         { amount, category, note, date }: ITransaction,
         actions: FormikActions<ITransaction>
     ) => {
-        setTransaction({ amount, category, note, date })
+        const type = 'expenses'
+        // setTransaction({ amount, category, note, date, type })
         actions.setSubmitting(true)
 
         setError(null)
         setIsLoading(true)
-        try {
-            console.log(`SAVING: ${Object.entries(transaction)}`)
-        } catch (e) {
-            setError(e.message)
-            setIsLoading(false)
-        }
-        await actions.setSubmitting(false)
-        // toggleModal()
+
+        // try {
+        console.log(`MODAL | SAVING: ${{ amount, category, note, date, type }}`)
+        // SAVE_TRANSACTION(transaction)
+        // } catch (e) {
+        //     setError(e.message)
+        //     setIsLoading(false)
+        // }
+
+        actions.setSubmitting(false)
+        toggleModal()
+    }
+
+    const initialValues = {
+        amount: '123.00',
+        category: 'Health',
+        note: 'Test123',
+        date: new Date(),
+        type: 'expense',
     }
 
     const renderModalElement = () => {
         return (
-            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
+            <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={50}>
                 <ScrollView>
                     <Formik
-                        initialValues={transaction}
+                        initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={(values: ITransaction, actions: FormikActions<ITransaction>) => {
+                        onSubmit={async (
+                            values: ITransaction,
+                            actions: FormikActions<ITransaction>
+                        ) => {
                             handleSave(values, actions)
                         }}
                     >
@@ -89,20 +106,21 @@ const TransactionScreen: React.FC<Props> = props => {
                             touched,
                             setFieldTouched,
                         }) => (
-                            <Layout level="3" style={styles.modalContainer}>
-                                <Text category="h3">Add transaction</Text>
+                            <Layout level='3' style={styles.modalContainer}>
+                                <Text category='h3'>Add transaction</Text>
 
                                 <Input
                                     style={styles.input}
-                                    label="Amount"
+                                    label='Amount'
                                     disabled={false}
-                                    placeholder="0.00"
-                                    keyboardType="decimal-pad"
-                                    autoCapitalize="none"
-                                    errorMessage="Enter valid amount"
-                                    returnKeyType="next"
+                                    placeholder='0.00'
+                                    keyboardType='decimal-pad'
+                                    autoCapitalize='none'
+                                    errorMessage='Enter valid amount'
+                                    returnKeyType='next'
                                     onChangeText={handleChange('amount')}
                                     onBlur={() => setFieldTouched('amount')}
+                                    // onBlur={handleBlur('amount')}
                                     value={values.amount}
                                 />
                                 {touched.amount && errors.amount && (
@@ -111,16 +129,17 @@ const TransactionScreen: React.FC<Props> = props => {
 
                                 <Input
                                     style={styles.input}
-                                    label="Category"
+                                    label='Category'
                                     disabled={false}
-                                    placeholder="Select category"
-                                    keyboardType="default"
-                                    autoCapitalize="sentences"
+                                    placeholder='Select category'
+                                    keyboardType='default'
+                                    autoCapitalize='sentences'
                                     maxLength={30}
-                                    errorMessage="Enter valid category"
-                                    returnKeyType="next"
+                                    errorMessage='Enter valid category'
+                                    returnKeyType='next'
                                     onChangeText={handleChange('category')}
                                     onBlur={() => setFieldTouched('category')}
+                                    // onBlur={handleBlur('category')}
                                     value={values.category}
                                 />
                                 {touched.category && errors.category && (
@@ -129,16 +148,17 @@ const TransactionScreen: React.FC<Props> = props => {
 
                                 <Input
                                     style={styles.input}
-                                    label="Note"
+                                    label='Note'
                                     disabled={false}
-                                    placeholder="Enter details"
-                                    keyboardType="default"
-                                    autoCapitalize="sentences"
+                                    placeholder='Enter details'
+                                    keyboardType='default'
+                                    autoCapitalize='sentences'
                                     maxLength={30}
-                                    errorMessage="Enter valid note"
-                                    returnKeyType="next"
+                                    errorMessage='Enter valid note'
+                                    returnKeyType='next'
                                     onChangeText={handleChange('note')}
                                     onBlur={() => setFieldTouched('note')}
+                                    // onBlur={handleBlur('note')}
                                     value={values.note}
                                 />
                                 {touched.note && errors.note && (
@@ -147,19 +167,19 @@ const TransactionScreen: React.FC<Props> = props => {
 
                                 <Datepicker
                                     icon={CalendarIcon}
-                                    date={transaction.date}
+                                    date={values.date}
                                     onSelect={onSelectDate}
                                 />
 
                                 {isLoading ? (
-                                    <Spinner status="primary" size="medium" />
+                                    <Spinner status='primary' size='medium' />
                                 ) : (
                                     <Button
                                         icon={CheckmarkIcon}
-                                        status="success"
-                                        size="medium"
+                                        status='success'
+                                        size='medium'
                                         onPress={handleSubmit}
-                                        title="Save"
+                                        title='Save'
                                         disabled={!isValid || !dirty || isSubmitting}
                                     >
                                         Save
@@ -177,7 +197,7 @@ const TransactionScreen: React.FC<Props> = props => {
         <Layout style={styles.tabContent}>
             <Text category={'h1'}>Add transaction</Text>
 
-            <Button icon={PlusIcon} onPress={toggleModal} status="success" size="large">
+            <Button icon={PlusIcon} onPress={toggleModal} status='success' size='large'>
                 Add transaction
             </Button>
 
@@ -192,7 +212,7 @@ const TransactionScreen: React.FC<Props> = props => {
         </Layout>
     )
 }
-export const TopNavigationSimpleUsageShowcase = () => <TopNavigation title="Home" />
+export const TopNavigationSimpleUsageShowcase = () => <TopNavigation title='Home' />
 
 const styles = StyleSheet.create({
     container: {

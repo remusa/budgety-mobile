@@ -1,5 +1,6 @@
-import { User } from 'firebase'
 import { AsyncStorage } from 'react-native'
+// import AsyncStorage from '@react-native-community/async-storage'
+import { User } from 'firebase'
 import Firebase, { db } from './Firebase'
 
 export const getUser = async (uid: string) => {
@@ -87,4 +88,3 @@ export const FIREBASE_SIGNOUT = async () => {
 
     return
 }
-
