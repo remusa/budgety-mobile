@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native'
 // import AsyncStorage from '@react-native-community/async-storage'
 import { User } from 'firebase'
-import Firebase, { db } from './Firebase'
+import firebase, { db } from './Firebase'
 
 export const getUser = async (uid: string) => {
     return await db
@@ -11,7 +11,7 @@ export const getUser = async (uid: string) => {
 }
 
 export const FIREBASE_SIGNUP = async (email: string, password: string) => {
-    const response = await Firebase.auth()
+    const response = await firebase.auth()
         .createUserWithEmailAndPassword(email, password)
         // .then(() => this.props.navigation.navigate('Home'))
         .catch(error => {
@@ -26,7 +26,7 @@ export const FIREBASE_SIGNUP = async (email: string, password: string) => {
         })
 
     if (response) {
-        const user: User = await Firebase.auth().currentUser
+        const user: User = await firebase.auth().currentUser
         const currentUser = {
             uid: user.uid,
             email: user.email,
@@ -36,7 +36,7 @@ export const FIREBASE_SIGNUP = async (email: string, password: string) => {
             .doc(response.user.uid)
             .set(currentUser)
 
-        const token = await Firebase.auth().currentUser.getIdToken()
+        const token = await firebase.auth().currentUser.getIdToken()
 
         await AsyncStorage.setItem('userData', JSON.stringify(currentUser))
         await AsyncStorage.setItem('userToken', token)
@@ -46,7 +46,7 @@ export const FIREBASE_SIGNUP = async (email: string, password: string) => {
 }
 
 export const FIREBASE_SIGNIN = async (email: string, password: string) => {
-    const response = await Firebase.auth()
+    const response = await firebase.auth()
         .signInWithEmailAndPassword(email, password)
         // .then(() => this.props.navigation.navigate('Home'))
         .catch(error => {
@@ -70,7 +70,7 @@ export const FIREBASE_SIGNIN = async (email: string, password: string) => {
         const user = getUser(response.user.uid)
         // const data = user.data()
 
-        const token = await Firebase.auth().currentUser.getIdToken()
+        const token = await firebase.auth().currentUser.getIdToken()
 
         await AsyncStorage.setItem('userData', JSON.stringify(user))
         await AsyncStorage.setItem('userToken', token)
@@ -79,7 +79,7 @@ export const FIREBASE_SIGNIN = async (email: string, password: string) => {
 }
 
 export const FIREBASE_SIGNOUT = async () => {
-    await Firebase.auth()
+    await firebase.auth()
         .signOut()
         .catch(error => console.log(error))
 
