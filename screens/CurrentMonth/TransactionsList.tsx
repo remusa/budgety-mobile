@@ -23,13 +23,9 @@ const TransactionsList: React.FC<Props> = ({ transaction }) => {
   const deleteItem = async (id: string) => {
     const filteredTransactions = transactions.filter(transaction => transaction.id !== id)
     setTransactions(filteredTransactions)
-
     await DELETE_TRANSACTION(id)
   }
 
-  // const renderItemAccessory = (id: string) => {
-  //   return <Button onPress={() => console.log(id)}>Delete</Button>
-  // }
   const renderItemAccessory = props => {
     return (
       <Button status={'danger'} onPress={() => deleteItem(props)}>
