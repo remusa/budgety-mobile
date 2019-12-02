@@ -1,35 +1,49 @@
+import { User } from 'firebase'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Button, Layout, List, ListItem, Text } from 'react-native-ui-kitten'
-import { DELETE_TRANSACTION, GET_TRANSACTIONS } from '../../utils/transactions'
+import Firebase, { firestore } from '../../utils/Firebase'
+import { DELETE_TRANSACTION } from '../../utils/transactions'
 import { ITransaction } from './CurrentMonthScreen'
 
-interface Props {
-  transaction: ITransaction
-}
+interface Props {}
 
-const TransactionsList: React.FC<Props> = ({ transaction }) => {
+const TransactionsList: React.FC<Props> = () => {
   const [transactions, setTransactions] = useState<Array<ITransaction>>([])
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      const res = await GET_TRANSACTIONS()
-      setTransactions(res)
+    const user: User | null = Firebase.auth().currentUser
+
+    if (!user) {
+      throw new Error(`User not found`)
+    }
+
+    let unsubscribe: any = null
+    const allTransactions = []
+
+    const fetchTransactions = () => {
+      unsubscribe = firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('transactions')
+        .onSnapshot(snapshot => {
+          snapshot.forEach(doc => {
+            const transaction = { ...doc.data(), id: doc.id }
+            allTransactions.concat([...allTransactions, transaction])
+          })
+        })
     }
 
     fetchTransactions()
-  }, [transaction])
+    setTransactions(allTransactions)
+
+    return () => unsubscribe()
+  }, [])
 
   const deleteItem = async (id: string) => {
-    const filteredTransactions = transactions.filter(transaction => transaction.id !== id)
-    setTransactions(filteredTransactions)
-
     await DELETE_TRANSACTION(id)
   }
 
-  // const renderItemAccessory = (id: string) => {
-  //   return <Button onPress={() => console.log(id)}>Delete</Button>
-  // }
   const renderItemAccessory = props => {
     return (
       <Button status={'danger'} onPress={() => deleteItem(props)}>

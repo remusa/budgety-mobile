@@ -36,13 +36,13 @@ export interface ITransaction {
 interface Props {}
 
 const CurrentMonthScreen: React.FC<Props> = props => {
-  const [transaction, setTransaction] = useState({
-    amount: '',
-    category: '',
-    note: '',
-    date: new Date(),
-    type: 'expense',
-  })
+  // const [transaction, setTransaction] = useState({
+  //   amount: '',
+  //   category: '',
+  //   note: '',
+  //   date: new Date(),
+  //   type: 'expense',
+  // })
   // const [transactions, setTransactions] = useState<Array<ITransaction>>([])
   const [modalVisible, setModalVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -56,21 +56,18 @@ const CurrentMonthScreen: React.FC<Props> = props => {
     setModalVisible(!modalVisible)
   }
 
-  const onSubmit = async (newTransaction: ITransaction, actions) => {
+  const handleCreate = async (newTransaction: ITransaction, actions) => {
     actions.setSubmitting(true)
-
-    // setError(null)
     setIsLoading(true)
+
     try {
-      setTransaction(newTransaction)
-      // setTransactions(transactions.concat(transaction))
       await POST_TRANSACTION(newTransaction)
     } catch (e) {
-      // setError(e.message)
       setIsLoading(false)
     }
+
     await actions.setSubmitting(false)
-    setIsLoading(true)
+    setIsLoading(false)
     toggleModal()
   }
 
@@ -88,7 +85,7 @@ const CurrentMonthScreen: React.FC<Props> = props => {
             }}
             validationSchema={validationSchema}
             onSubmit={(values: ITransaction, actions: FormikActions<ITransaction>) => {
-              onSubmit(values, actions)
+              handleCreate(values, actions)
             }}
           >
             {({
@@ -193,7 +190,7 @@ const CurrentMonthScreen: React.FC<Props> = props => {
         Add transaction
       </Button>
 
-      <TransactionsList transaction={transaction} />
+      <TransactionsList />
 
       <Modal
         allowBackdrop={true}
