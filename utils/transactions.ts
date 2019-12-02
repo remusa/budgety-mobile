@@ -22,7 +22,6 @@ export const GET_TRANSACTIONS = async () => {
     transactions.push({ ...doc.data(), id: doc.id })
   })
 
-  // console.log('transactions', transactions)
   return transactions
 }
 
@@ -33,17 +32,19 @@ export const POST_TRANSACTION = async transaction => {
     throw new Error(`User not found`)
   }
 
-  await firestore
+  const res = await firestore
     .collection('users')
     .doc(user.uid)
     .collection('transactions')
     .add(transaction)
-    .then(() => {
-      console.log('Document successfully written!')
-    })
+    .then(() => {})
     .catch(error => {
       console.error('Error writing document: ', error)
     })
+
+  if (res !== null) {
+    console.log('Document successfully written!')
+  }
 }
 
 export const DELETE_TRANSACTION = async (id: string) => {
@@ -53,18 +54,19 @@ export const DELETE_TRANSACTION = async (id: string) => {
     throw new Error(`User not found`)
   }
 
-  await firestore
+  const res = await firestore
     .collection('users')
     .doc(user.uid)
     .collection('transactions')
     .doc(id)
     .delete()
-    .then(() => {
-      console.log('Document successfully deleted!')
-    })
     .catch(error => {
       console.error('Error deleting document: ', error)
     })
+
+  if (res !== null) {
+    console.log('Document successfully deleted!')
+  }
 }
 
 export const UPDATE_TRANSACTION = async ({ transaction, changes }) => {
@@ -74,16 +76,17 @@ export const UPDATE_TRANSACTION = async ({ transaction, changes }) => {
     throw new Error(`User not found`)
   }
 
-  await firestore
+  const res = await firestore
     .collection('users')
     .doc(user.uid)
     .collection('transactions')
     .doc(transaction.id)
     .set({ ...transaction, changes })
-    .then(() => {
-      console.log('Document successfully updated!')
-    })
     .catch(error => {
       console.error('Error updating document: ', error)
     })
+
+  if (res !== null) {
+    console.log('Document successfully updated!')
+  }
 }
