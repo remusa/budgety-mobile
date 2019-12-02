@@ -167,7 +167,7 @@ const CurrentMonthScreen: React.FC<Props> = props => {
                   ) : (
                     <Button
                       icon={CheckmarkIcon}
-                      status='danger'
+                      status='success'
                       size='medium'
                       onPress={handleSubmit}
                       title='Save'

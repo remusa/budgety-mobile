@@ -31,7 +31,11 @@ const TransactionsList: React.FC<Props> = ({ transaction }) => {
   //   return <Button onPress={() => console.log(id)}>Delete</Button>
   // }
   const renderItemAccessory = props => {
-    return <Button onPress={() => deleteItem(props)}>Delete</Button>
+    return (
+      <Button status={'danger'} onPress={() => deleteItem(props)}>
+        Delete
+      </Button>
+    )
   }
 
   const renderItem = ({ item, index }) => {
