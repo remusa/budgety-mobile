@@ -6,7 +6,7 @@ import { NavigationParams, NavigationRoute } from 'react-navigation'
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack'
 import * as yup from 'yup'
 import { FIREBASE_SIGNIN, FIREBASE_SIGNUP, getUser } from '../../utils/auth'
-import Firebase from '../../utils/Firebase'
+import firebase from '../../utils/Firebase'
 import { emailValidation, passwordValidation } from '../../utils/validationSchemas'
 
 const PeopleIcon = style => <Icon {...style} name='people' />
@@ -31,14 +31,13 @@ interface Props {
 }
 
 const AuthScreen: React.FC<Props> = props => {
-  const [user, setUser] = useState<IUser>({ email: '', password: '' })
   const [isSignup, setIsSignup] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [secureTextEntry, setSecureTextEntry] = useState(true)
 
   useEffect(() => {
-    Firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const userData = getUser(user.uid)
         console.log('userData FOUND', userData)
@@ -59,7 +58,6 @@ const AuthScreen: React.FC<Props> = props => {
   }, [error])
 
   const handleAuth = async ({ email, password }: IUser, actions) => {
-    setUser({ email, password })
     actions.setSubmitting(true)
 
     setError(null)
@@ -88,11 +86,11 @@ const AuthScreen: React.FC<Props> = props => {
   const renderIcon = style => <Icon {...style} name={secureTextEntry ? 'eye-off' : 'eye'} />
 
   return (
-    <Layout style={styles.screen}>
-      <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={50}>
+    <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={50}>
+      <Layout style={styles.screen}>
         <ScrollView>
           <Formik
-            initialValues={user}
+            initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={(values: IUser, actions: FormikActions<IUser>) => {
               handleAuth(values, actions)
@@ -117,14 +115,14 @@ const AuthScreen: React.FC<Props> = props => {
                   icon={PeopleIcon}
                   style={styles.input}
                   label='Email'
-                  disabled={false}
+                  // disabled={false}
                   placeholder='Email'
                   keyboardType='email-address'
                   autoCapitalize='none'
                   returnKeyType='next'
                   onChangeText={handleChange('email')}
-                  // onBlur={handleBlur('email')}
-                  onBlur={() => setFieldTouched('email')}
+                  onBlur={handleBlur('email')}
+                  // onBlur={() => setFieldTouched('email')}
                   value={values.email}
                 />
                 {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
@@ -135,8 +133,8 @@ const AuthScreen: React.FC<Props> = props => {
                   onIconPress={onIconPress}
                   style={styles.input}
                   label='Password'
-                  disabled={false}
-                  placeholder='Password'
+                  // disabled={false}
+                  placeholder='*****'
                   keyboardType='default'
                   autoCapitalize='none'
                   minLength={5}
@@ -144,8 +142,8 @@ const AuthScreen: React.FC<Props> = props => {
                   errorMessage='Enter valid password'
                   returnKeyType='next'
                   onChangeText={handleChange('password')}
-                  // onBlur={handleBlur('password')}
-                  onBlur={() => setFieldTouched('password')}
+                  onBlur={handleBlur('password')}
+                  // onBlur={() => setFieldTouched('password')}
                   value={values.password}
                 />
                 {touched.password && errors.password && (
@@ -191,8 +189,8 @@ const AuthScreen: React.FC<Props> = props => {
             )}
           </Formik>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </Layout>
+      </Layout>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -204,11 +202,11 @@ const styles = StyleSheet.create({
   screen: {
     width: '100%',
     height: '100%',
-    padding: 8,
+    padding: 16,
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     // width: '80%',
     // maxWidth: 400,
@@ -225,10 +223,13 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   buttonsContainer: {
+    width: '50%',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 16,
+    marginBottom: 16,
   },
   buttonContainer: {
     flex: 1,
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
   },
   error: {
     textAlign: 'center',
-    fontSize: 10,
+    fontSize: 14,
     color: 'red',
   },
 })

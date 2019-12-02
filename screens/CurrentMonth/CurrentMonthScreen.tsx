@@ -1,8 +1,18 @@
 import { Formik, FormikActions } from 'formik'
 import React, { useState } from 'react'
 import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native'
-import { Button, Datepicker, Icon, Input, Layout, Modal, Text } from 'react-native-ui-kitten'
+import {
+  Button,
+  Datepicker,
+  Icon,
+  Input,
+  Layout,
+  Modal,
+  Spinner,
+  Text,
+} from 'react-native-ui-kitten'
 import * as yup from 'yup'
+import { POST_TRANSACTION } from '../../utils/transactions'
 import { amountValidation } from '../../utils/validationSchemas'
 import TransactionsList from './TransactionsList'
 
@@ -10,55 +20,58 @@ const PlusIcon = style => <Icon {...style} name='plus-circle' />
 const CheckmarkIcon = style => <Icon {...style} name='checkmark-circle-2' />
 const CalendarIcon = style => <Icon {...style} name='calendar' />
 
+const validationSchema = yup.object().shape({
+  amount: amountValidation,
+})
+
 export interface ITransaction {
+  id?: string
   amount: string
   category: string
   note: string
   date: Date
+  type: string
 }
 
 interface Props {}
 
 const CurrentMonthScreen: React.FC<Props> = props => {
-  const [transactions, setTransactions] = useState<Array<ITransaction>>([
-    {
-      amount: '123.50',
-      category: 'Food',
-      note: 'Pizza',
-      date: new Date(),
-    },
-  ])
+  const [transaction, setTransaction] = useState({
+    amount: '',
+    category: '',
+    note: '',
+    date: new Date(),
+    type: 'expense',
+  })
+  // const [transactions, setTransactions] = useState<Array<ITransaction>>([])
   const [modalVisible, setModalVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [date, setDate] = useState<Date>(new Date())
 
   const onSelectDate = date => {
-    console.log('date', date)
+    setDate(date)
   }
 
   const toggleModal = () => {
     setModalVisible(!modalVisible)
   }
 
-  const validationSchema = yup.object().shape({
-    amount: amountValidation,
-  })
-
-  const onSubmit = async ({ amount, category, note, date }: ITransaction, actions) => {
+  const onSubmit = async (newTransaction: ITransaction, actions) => {
     actions.setSubmitting(true)
 
-    setError(null)
+    // setError(null)
     setIsLoading(true)
     try {
-      await console.log(`SAVING: ${Object.values({ amount, category, note, date })}`)
-      setTransactions(transactions.concat({ amount, category, note, date }))
+      setTransaction(newTransaction)
+      // setTransactions(transactions.concat(transaction))
+      await POST_TRANSACTION(newTransaction)
     } catch (e) {
-      setError(e.message)
+      // setError(e.message)
       setIsLoading(false)
     }
     await actions.setSubmitting(false)
-    await setIsLoading(true)
-    await toggleModal()
+    setIsLoading(true)
+    toggleModal()
   }
 
   const renderModalElement = () => {
@@ -71,6 +84,7 @@ const CurrentMonthScreen: React.FC<Props> = props => {
               category: 'Category 1',
               note: 'Test note',
               date: new Date(),
+              type: 'expense',
             }}
             validationSchema={validationSchema}
             onSubmit={(values: ITransaction, actions: FormikActions<ITransaction>) => {
@@ -102,7 +116,8 @@ const CurrentMonthScreen: React.FC<Props> = props => {
                   errorMessage='Enter valid amount'
                   returnKeyType='next'
                   onChangeText={handleChange('amount')}
-                  onBlur={() => setFieldTouched('amount')}
+                  // onBlur={() => setFieldTouched('amount')}
+                  onBlur={handleBlur('amount')}
                   value={values.amount}
                 />
                 {touched.amount && errors.amount && (
@@ -120,7 +135,8 @@ const CurrentMonthScreen: React.FC<Props> = props => {
                   errorMessage='Enter valid category'
                   returnKeyType='next'
                   onChangeText={handleChange('category')}
-                  onBlur={() => setFieldTouched('category')}
+                  // onBlur={() => setFieldTouched('category')}
+                  onBlur={handleBlur('category')}
                   value={values.category}
                 />
                 {touched.category && errors.category && (
@@ -143,22 +159,24 @@ const CurrentMonthScreen: React.FC<Props> = props => {
                 />
                 {touched.note && errors.note && <Text style={styles.error}>{errors.note}</Text>}
 
-                <Datepicker icon={CalendarIcon} date={values.date} onSelect={onSelectDate} />
+                <Datepicker icon={CalendarIcon} date={date} onSelect={onSelectDate} />
 
-                {/* {isLoading ? (
-                  <Spinner status='primary' size='medium' />
-                ) : ( */}
-                <Button
-                  icon={CheckmarkIcon}
-                  status='success'
-                  size='medium'
-                  onPress={handleSubmit}
-                  title='Save'
-                  // disabled={!isValid || !dirty || isSubmitting}
-                >
-                  Save
-                </Button>
-                {/* )} */}
+                <Layout style={styles.saveBtnContainer}>
+                  {isLoading ? (
+                    <Spinner status='primary' size='medium' />
+                  ) : (
+                    <Button
+                      icon={CheckmarkIcon}
+                      status='danger'
+                      size='medium'
+                      onPress={handleSubmit}
+                      title='Save'
+                      // disabled={!isValid || !dirty || isSubmitting}
+                    >
+                      Save
+                    </Button>
+                  )}
+                </Layout>
               </Layout>
             )}
           </Formik>
@@ -175,7 +193,7 @@ const CurrentMonthScreen: React.FC<Props> = props => {
         Add transaction
       </Button>
 
-      <TransactionsList transactions={transactions} />
+      <TransactionsList transaction={transaction} />
 
       <Modal
         allowBackdrop={true}
@@ -214,6 +232,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 10,
     color: 'red',
+  },
+  saveBtnContainer: {
+    marginTop: 8,
   },
 })
 
