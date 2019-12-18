@@ -1,13 +1,6 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
-import {
-  API_KEY,
-  APP_ID,
-  AUTH_DOMAIN,
-  DATABASE_URL,
-  MESSAGE_SENDER_ID,
-  PROJECT_ID,
-} from 'react-native-dotenv'
+import { API_KEY, APP_ID, AUTH_DOMAIN, DATABASE_URL, MESSAGE_SENDER_ID, PROJECT_ID } from 'react-native-dotenv'
 
 const firebaseConfig = {
   apiKey: API_KEY,
